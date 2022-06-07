@@ -34,57 +34,66 @@ class MergeTable extends StatelessWidget {
       columnWidths: columnWidths,
       defaultVerticalAlignment: defaultVerticalAlignment,
       children: [
-        TableRow(
+        buildHeader(),
+        ...buildRows(),
+      ],
+    );
+  }
+
+  TableRow buildHeader() {
+    return TableRow(
+      children: List.generate(
+        columns.length,
+        (index) {
+          BaseMColumn column = columns[index];
+          if (column.columns != null) {
+            return buildMergedColumn(column);
+          } else {
+            return buildSingleColumn(column.header);
+          }
+        },
+      ),
+    );
+  }
+
+  List<TableRow> buildRows() {
+    return List.generate(
+      rows.length,
+      (index) {
+        List<BaseMRow> values = rows[index];
+        return TableRow(
           children: List.generate(
-            columns.length,
+            values.length,
             (index) {
-              BaseMColumn column = columns[index];
-              if (column.columns != null) {
-                return buildMergedColumn(column);
+              BaseMRow item = values[index];
+              bool isMergedColumn = item.inlineRow.length > 1;
+              if (isMergedColumn) {
+                return buildMutiColumns(item.inlineRow);
               } else {
-                return buildColumn(column.header);
+                return buildAlign(item.inlineRow.first);
               }
             },
           ),
-        ),
-        ...List.generate(
-          rows.length,
-          (index) {
-            final row = rows[index];
-            return TableRow(
-              children: List.generate(
-                row.length,
-                (index) {
-                  final customRow = row[index];
-                  if (customRow.inlineRow.length > 1) {
-                    return buildColumns(customRow.inlineRow);
-                  } else {
-                    return buildAlign(customRow.inlineRow.first);
-                  }
-                },
-              ),
-            );
-          },
-        ),
-      ],
+        );
+      },
     );
   }
 
   Widget buildMergedColumn(BaseMColumn column) {
     return Column(
       children: [
-        buildColumn(column.header),
+        buildSingleColumn(column.header),
         Divider(color: borderColor, height: 1, thickness: 1),
-        buildColumns(
+        buildMutiColumns(
           List.generate(column.columns!.length, (index) {
-            return buildColumn(column.columns![index]);
+            return buildSingleColumn(column.columns![index]);
           }),
         ),
       ],
     );
   }
 
-  Widget buildColumns(List<Widget> values) {
+  Widget buildMutiColumns(List<Widget> values) {
     return LayoutBuilder(builder: (context, constriant) {
       List<Widget> children = List.generate(values.length, (index) {
         Widget value = values[index];
@@ -109,7 +118,7 @@ class MergeTable extends StatelessWidget {
     });
   }
 
-  Widget buildColumn(String title) {
+  Widget buildSingleColumn(String title) {
     return buildAlign(Text(title));
   }
 

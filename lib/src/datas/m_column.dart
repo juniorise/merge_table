@@ -18,11 +18,11 @@ class MColumn extends BaseMColumn {
   }) : super(header: header, columns: null);
 }
 
-class MMergedColumn extends BaseMColumn {
+class MMergedColumns extends BaseMColumn {
   @override
   List<String> get columns => super.columns!;
 
-  MMergedColumn({
+  MMergedColumns({
     required super.header,
     required List<String> columns,
   }) : super(columns: columns);

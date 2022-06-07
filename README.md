@@ -18,7 +18,7 @@ MergeTable(
     MColumn(header: "Pump"),
     MColumn(header: "Product"),
     MColumn(header: "Seal"),
-    MMergedColumn(
+    MMergedColumns(
       header: "Reading",
       columns: ["Before", "Then", "After"],
     ),
