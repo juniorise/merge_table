@@ -1,6 +1,15 @@
 
 <img width="701" alt="image" src="https://user-images.githubusercontent.com/29684683/172324800-9a322d9c-01d6-41d3-90c5-6c3911407c01.png">
 
+```yaml
+dependencies:
+  # ...
+  merge_table:
+    git:
+      url: https://github.com/juniorise/merge_table.git
+      ref: master
+```
+
 ```dart
 MergeTable(
   borderColor: Colors.black,
