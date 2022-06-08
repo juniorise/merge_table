@@ -9,15 +9,12 @@ class MergeTable extends StatelessWidget {
     this.rowHeight,
     this.alignment = MergeTableAlignment.center,
   }) : super(key: key) {
+    columnWidths = fetchColumnWidths(columns);
     assert(columns.isNotEmpty);
     assert(rows.isNotEmpty);
     for (List<BaseMRow> row in rows) {
       assert(row.length == columns.length);
     }
-
-    // load late fields
-    loadColumnWidths(columns);
-    loadAlignment();
   }
 
   final Color borderColor;
@@ -26,8 +23,9 @@ class MergeTable extends StatelessWidget {
   final MergeTableAlignment alignment;
   final double? rowHeight;
   late final Map<int, TableColumnWidth> columnWidths;
-  late final TableCellVerticalAlignment defaultVerticalAlignment;
-  late final AlignmentGeometry alignmentGeometry;
+
+  TableCellVerticalAlignment get defaultVerticalAlignment => alignment.tableAlignment;
+  AlignmentGeometry get alignmentGeometry => alignment.geometry;
 
   @override
   Widget build(BuildContext context) {
@@ -134,8 +132,8 @@ class MergeTable extends StatelessWidget {
     );
   }
 
-  void loadColumnWidths(List<BaseMColumn> columns) {
-    columnWidths = {};
+  Map<int, TableColumnWidth> fetchColumnWidths(List<BaseMColumn> columns) {
+    Map<int, TableColumnWidth> columnWidths = {};
     double flexPerColumn = 1 / columns.length;
     for (int i = 0; i < columns.length; i++) {
       BaseMColumn column = columns[i];
@@ -145,47 +143,6 @@ class MergeTable extends StatelessWidget {
         columnWidths[i] = FlexColumnWidth(flexPerColumn);
       }
     }
-  }
-
-  void loadAlignment() {
-    switch (alignment) {
-      case MergeTableAlignment.centerLeft:
-      case MergeTableAlignment.centerRight:
-      case MergeTableAlignment.center:
-        defaultVerticalAlignment = TableCellVerticalAlignment.middle;
-        break;
-      case MergeTableAlignment.bottomLeft:
-      case MergeTableAlignment.bottomRight:
-        defaultVerticalAlignment = TableCellVerticalAlignment.bottom;
-        break;
-      case MergeTableAlignment.topRight:
-      case MergeTableAlignment.topLeft:
-        defaultVerticalAlignment = TableCellVerticalAlignment.top;
-        break;
-    }
-
-    switch (alignment) {
-      case MergeTableAlignment.centerLeft:
-        alignmentGeometry = Alignment.centerLeft;
-        break;
-      case MergeTableAlignment.centerRight:
-        alignmentGeometry = Alignment.centerRight;
-        break;
-      case MergeTableAlignment.bottomLeft:
-        alignmentGeometry = Alignment.bottomLeft;
-        break;
-      case MergeTableAlignment.bottomRight:
-        alignmentGeometry = Alignment.bottomRight;
-        break;
-      case MergeTableAlignment.topLeft:
-        alignmentGeometry = Alignment.topLeft;
-        break;
-      case MergeTableAlignment.topRight:
-        alignmentGeometry = Alignment.topRight;
-        break;
-      case MergeTableAlignment.center:
-        alignmentGeometry = Alignment.center;
-        break;
-    }
+    return columnWidths;
   }
 }

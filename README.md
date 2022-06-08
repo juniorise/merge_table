@@ -7,7 +7,7 @@ dependencies:
   merge_table:
     git:
       url: https://github.com/juniorise/merge_table.git
-      ref: 1.0.0
+      ref: 1.0.1
 ```
 
 ```dart
