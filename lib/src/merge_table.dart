@@ -6,6 +6,7 @@ class MergeTable extends StatelessWidget {
     required this.rows,
     required this.columns,
     required this.borderColor,
+    this.rowHeight,
     this.alignment = MergeTableAlignment.center,
   }) : super(key: key) {
     assert(columns.isNotEmpty);
@@ -23,6 +24,7 @@ class MergeTable extends StatelessWidget {
   final List<BaseMColumn> columns;
   final List<List<BaseMRow>> rows;
   final MergeTableAlignment alignment;
+  final double? rowHeight;
   late final Map<int, TableColumnWidth> columnWidths;
   late final TableCellVerticalAlignment defaultVerticalAlignment;
   late final AlignmentGeometry alignmentGeometry;
@@ -103,16 +105,19 @@ class MergeTable extends StatelessWidget {
           child: buildAlign(value),
         );
       });
-      return IntrinsicHeight(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            for (Widget child in children.take(children.length - 1)) ...[
-              child,
-              VerticalDivider(width: 1, color: borderColor, thickness: 1)
+      return Container(
+        height: rowHeight,
+        child: IntrinsicHeight(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (Widget child in children.take(children.length - 1)) ...[
+                child,
+                VerticalDivider(width: 1, color: borderColor, thickness: 1)
+              ],
+              children.last,
             ],
-            children.last,
-          ],
+          ),
         ),
       );
     });

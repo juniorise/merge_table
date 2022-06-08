@@ -23,7 +23,7 @@ class MMergedColumns extends BaseMColumn {
   List<String> get columns => super.columns!;
 
   MMergedColumns({
-    required super.header,
+    required String header,
     required List<String> columns,
-  }) : super(columns: columns);
+  }) : super(columns: columns, header: header);
 }
